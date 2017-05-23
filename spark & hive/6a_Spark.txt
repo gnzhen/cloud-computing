@@ -1,0 +1,5 @@
+val highSchool = data.map(x =>(x(1),x(3))).filter(x => x._2.contains("HighSchool"))
+
+val countStudent = highSchool.map(x => (x._1,1)).reduceByKey(_+_)
+
+val highestEduNation = countStudent.sortBy(-_._2).map(x => x._1).first()

@@ -1,0 +1,5 @@
+val topicRDD = data.map(x => (x(6),1)).reduceByKey(_+_)
+
+topicRDD.collect
+
+topicRDD.map(x => x._1 + "," + x._2).saveAsTextFile("user/cloudera/topic_number")

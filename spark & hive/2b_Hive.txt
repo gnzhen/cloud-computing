@@ -1,0 +1,32 @@
+CREATE TABLE topic_grade_gender(topic varchar(255), grade varchar(255), gender char(1))
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+
+CREATE TABLE grades(grade varchar(255), intgrade smallint)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+
+LOAD DATA INPATH 'user/cloudera/topic_grade_gender/part-00000' INTO TABLE topic_grade_gender;
+LOAD DATA  INPATH 'user/cloudera/topic_grade_gender/part-00001' INTO TABLE topic_grade_gender;
+LOAD DATA INPATH 'user/cloudera/grade_int/part-00000' INTO TABLE grades;
+LOAD DATA INPATH 'user/cloudera/grade_int/part-00001' INTO TABLE grades;
+
+SELECT * FROM grades;
+SELECT * FROM topic_grade_gender;
+
+CREATE VIEW gradeAvg AS
+SELECT tgg.topic AS subject, avg(g.intgrade) AS avggrade, tgg.gender AS gender
+FROM topic_grade_gender AS tgg
+INNER JOIN grades AS g
+ON g.grade=tgg.grade
+GROUP BY tgg.topic, tgg.gender;
+
+SELECT * FROM gradeAvg;
+
+CREATE VIEW mingrade AS
+SELECT subject, MIN(avggrade) AS minavg FROM gradeAvg
+GROUP BY subject;
+
+SELECT * FROM mingrade;
+
+SELECT mg.subject AS subject, ga.gender AS gender FROM gradeavg AS ga 
+INNER JOIN mingrade AS mg 
+ON mg.subject = ga.subject AND avggrade = minavg;

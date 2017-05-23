@@ -1,0 +1,3 @@
+val stages = data.map(x=>(x(3),x(4)))
+stages.collect
+stages.map(x => x._1 + "," + x._2 + ").saveAsTextFile("user/cloudera/stages_grade")

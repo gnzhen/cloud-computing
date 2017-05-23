@@ -1,0 +1,20 @@
+CREATE TABLE stages_grade(stage varchar(255), grade varchar(255))
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+
+LOAD DATA INPATH 'user/cloudera/stages_grade/part-00000' INTO TABLE stages_grade;
+LOAD DATA INPATH 'user/cloudera/stages_grade/part-00001' INTO TABLE stages_grade;
+
+SELECT * FROM stages_grade;
+
+CREATE VIEW stagesGradeView AS SELECT sg.stage AS stage, MIN(g.intgrade) AS minIntGrade
+FROM stages_grade AS sg
+INNER JOIN grades AS g
+ON g.grade = sg.grade
+GROUP BY sg.stage;
+
+SELECT * FROM stagesGradeView;
+
+SELECT sgv.stage, g.grade 
+FROM stagesGradeView AS sgv 
+INNER JOIN grades AS g 
+ON sgv.minIntGrade = g.intgrade;

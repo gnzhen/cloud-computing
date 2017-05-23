@@ -1,0 +1,12 @@
+val mapSection = data.map(word=>(word(4),word(6),word(15)))
+
+val filterData = mapSection.filter(x=>x._3.contains("Above-7") && x._2.contains("Math"))
+
+val filterColumn = filterData.map(x => (x._1))
+
+val countRDD = filterColumn.map(line=>(line,1))
+
+val keepCount = countRDD.reduceByKey((x,y) => x + y)
+
+println("The gradeID vs number of students is : \n")
+keepCount.foreach(println)

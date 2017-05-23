@@ -1,0 +1,7 @@
+CREATE DATABASE education;
+
+SHOW DATABASES;
+
+USE education;
+
+SELECT current_database();

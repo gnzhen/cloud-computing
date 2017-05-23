@@ -1,0 +1,9 @@
+hdfs dfs -put education.csv /user/cloudera/
+
+spark-shell
+
+val datafile = sc.textFile("education.csv")
+val rmheader = datafile.mapPartitionsWithIndex {(idx, iter) => if (idx == 0) iter.drop(1) else iter}
+val data = rmheader.map(line=>line.split(","))
+
+data.collect

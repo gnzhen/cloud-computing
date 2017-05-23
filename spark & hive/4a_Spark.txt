@@ -1,0 +1,7 @@
+val mapData = data.map(line=>(line(7),line(10)))
+
+val total = mapData.aggregate(0)((x,y)=>if(y._1.contains("F")) x + y._2.toInt  else x, (a, b) => a + b)
+
+val count = mapData.filter(x=>x._1.contains("F")).count
+
+println("The average times of visits to a course content is : " + total / count.toDouble)

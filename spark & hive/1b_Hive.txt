@@ -1,0 +1,21 @@
+CREATE TABLE topic (topic varchar(255), totalStudents smallint)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+
+LOAD DATA INPATH 'user/cloudera/topic_number/part-00000' INTO TABLE topic;
+LOAD DATA INPATH 'user/cloudera/topic_number/part-00001' INTO TABLE topic;
+
+SET hive.cli.print.header = TRUE;
+
+SELECT * FROM topic;
+
+CREATE VIEW totalStudents AS 
+SELECT MAX(totalstudents) AS totalStudents 
+FROM topic;
+
+SELECT * FROM totalStudents;
+
+SELECT topic AS subject 
+FROM topic AS t 
+INNER JOIN totalStudents AS ts 
+ON t.totalstudents = ts.totalstudents;
+
